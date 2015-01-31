@@ -15,4 +15,3 @@ Channel : #spythiskeyboard
 * XML to JSON format
 * Add packet sniffer
 * Add more botnet cmd
-* Add mouse x & y position
